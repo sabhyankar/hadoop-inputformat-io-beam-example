@@ -1,0 +1,156 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.google.cloud.pso</groupId>
+    <artifactId>hadoop-inputformat-io-example</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>hadoop-inputformat-io-example</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <beam.version>2.3.0</beam.version>
+        <maven-compiler-plugin.version>3.6.2</maven-compiler-plugin.version>
+        <compiler.error.flag>-Werror</compiler.error.flag>
+        <compiler.default.pkginfo.flag>-Xpkginfo:always</compiler.default.pkginfo.flag>
+        <compiler.default.exclude>nothing</compiler.default.exclude>
+        <hadoop.version>2.7.2</hadoop.version>
+        <orc.version>1.4.3</orc.version>
+        <gcp.connector.version>1.7.0</gcp.connector.version>
+        <guava.version>20.0</guava.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.beam</groupId>
+            <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>
+            <version>${beam.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.beam</groupId>
+            <artifactId>beam-sdks-java-io-hadoop-input-format</artifactId>
+            <version>${beam.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.orc</groupId>
+            <artifactId>orc-mapreduce</artifactId>
+            <version>${orc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.orc</groupId>
+            <artifactId>orc-core</artifactId>
+            <version>${orc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.cloud.bigdataoss</groupId>
+            <artifactId>util</artifactId>
+            <version>${gcp.connector.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.cloud.bigdataoss</groupId>
+            <artifactId>gcs-connector</artifactId>
+            <version>${gcp.connector.version}-hadoop2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.cloud.bigdataoss</groupId>
+            <artifactId>gcsio</artifactId>
+            <version>${gcp.connector.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgs>
+                        <arg>-Xlint:all</arg>
+                        <arg>${compiler.error.flag}</arg>
+                        <!-- Override options warnings to support cross-compilation -->
+                        <arg>-Xlint:-options</arg>
+                        <!-- Temporary lint overrides, to be removed over time. -->
+                        <arg>-Xlint:-cast</arg>
+                        <arg>-Xlint:-deprecation</arg>
+                        <arg>-Xlint:-processing</arg>
+                        <arg>-Xlint:-rawtypes</arg>
+                        <arg>-Xlint:-serial</arg>
+                        <arg>-Xlint:-try</arg>
+                        <arg>-Xlint:-unchecked</arg>
+                        <arg>-Xlint:-varargs</arg>
+                        <!-- Uncomment the following args to display more warnings. -->
+                        <!-- -Xmaxwarns -->
+                        <!-- 10000 -->
+                    </compilerArgs>
+                    <showWarnings>true</showWarnings>
+                    <!-- Another temp override, to be set to true in due course. -->
+                    <showDeprecation>false</showDeprecation>
+                </configuration>
+                <executions>
+
+                    <execution>
+                        <id>default-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>${compiler.default.pkginfo.flag}</arg>
+                            </compilerArgs>
+                            <excludes>
+                                <exclude>${compiler.default.exclude}</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>java.util.logging.config.file</key>
+                            <value>logging.properties</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
